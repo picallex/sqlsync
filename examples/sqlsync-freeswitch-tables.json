@@ -1,0 +1,236 @@
+{
+    "tick": 1,
+    "draft": false,
+    "debug": false,
+    "env_from_aws_secretsmanager_id": "MYSECRETKEYFOROVERLOADINGENVIRONMENT",
+    "sqlsync": {
+        "members": {
+            "active": true,
+            "source": {
+                "db_driver": "postgres",
+                "db_url": "postgres://postgres:bob@localhost/freeswitch",
+                "table_name": "members",
+                "domain": [["instance_id", "=", "{exec:fs_cli -x 'eval $${switchname}'}"]],
+                "identifier_columns": ["instance_id", "uuid"],
+                "columns": {
+                    "queue": "string",
+                    "instance_id": "string",
+                    "uuid": "string",
+                    "session_uuid": "string",
+                    "cid_number": "string",
+                    "cid_name": "string",
+                    "system_epoch": "int32",
+                    "joined_epoch": "int32",
+                    "rejoined_epoch": "int32",
+                    "bridge_epoch": "int32",
+                    "abandoned_epoch": "int32",
+                    "base_score": "int32",
+                    "skill_score": "int32",
+                    "serving_agent": "string",
+                    "serving_system": "string",
+                    "state": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "postgres",
+                "db_url": "{env:FREESWITCH_DB_URL}",
+                "table_name": "members",
+                "domain": [["instance_id", "=", "{exec:fs_cli -x 'eval $${switchname}'}"]],
+                "identifier_columns": ["instance_id", "uuid"],
+                "columns": {
+                    "queue": "string",
+                    "instance_id": "string",
+                    "uuid": "string",
+                    "session_uuid": "string",
+                    "cid_number": "string",
+                    "cid_name": "string",
+                    "system_epoch": "int32",
+                    "joined_epoch": "int32",
+                    "rejoined_epoch": "int32",
+                    "bridge_epoch": "int32",
+                    "abandoned_epoch": "int32",
+                    "base_score": "int32",
+                    "skill_score": "int32",
+                    "serving_agent": "string",
+                    "serving_system": "string",
+                    "state": "string"
+                }
+            }
+        },
+        "registrations": {
+            "active": true,
+            "source": {
+                "db_driver": "fsocket",
+                "db_url": "fsocket://user:merosqlsync@127.0.0.1:8021",
+                "table_name": "registrations",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["reg_user", "realm", "hostname"],
+                "columns": {
+                    "reg_user": "string",
+                    "realm": "string",
+                    "token": "string",
+                    "url": "string",
+                    "expires": "string",
+                    "network_ip": "string",
+                    "network_port": "string",
+                    "network_proto": "string",
+                    "hostname": "string",
+                    "metadata": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "postgres",
+                "db_url": "{env:FREESWITCH_DB_URL}",
+                "table_name": "registrations",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["reg_user", "realm", "hostname"],
+                "columns": {
+                    "reg_user": "string",
+                    "realm": "string",
+                    "token": "string",
+                    "url": "string",
+                    "expires": "int32",
+                    "network_ip": "string",
+                    "network_port": "string",
+                    "network_proto": "string",
+                    "hostname": "string",
+                    "metadata": "string"
+                }
+            }
+        },
+        "calls": {
+            "active": true,
+            "source": {
+                "db_driver": "fsocket",
+                "db_url": "fsocket://user:merosqlsync@127.0.0.1:8021",
+                "table_name": "calls",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["call_uuid", "hostname"],
+                "columns": {
+                    "call_uuid": "string",
+                    "created": "string",
+                    "created_epoch": "string",
+                    "uuid": "string",
+                    "b_uuid": "string",
+                    "hostname": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "postgres",
+                "db_url": "{env:FREESWITCH_DB_URL}",
+                "table_name": "calls",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["call_uuid", "hostname"],
+                "mapping": {
+                    "call_uuid": "call_uuid",
+                    "created": "call_created",
+                    "created_epoch": "call_created_epoch",
+                    "uuid": "caller_uuid",
+                    "b_uuid": "callee_uuid",
+                    "hostname": "hostname"
+                },
+                "columns": {
+                    "call_uuid": "string",
+                    "call_created": "string",
+                    "call_created_epoch": "int32",
+                    "caller_uuid": "string",
+                    "callee_uuid": "string",
+                    "hostname": "string"
+                }
+            }
+        },
+        "channels":  {
+            "active": true,
+            "source": {
+                "db_driver": "fsocket",
+                "db_url": "fsocket://user:merosqlsync@127.0.0.1:8021",
+                "table_name": "channels",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["uuid", "hostname"],
+                "columns": {
+                    "uuid": "string",
+                    "direction": "string",
+		    "created": "string",
+		    "created_epoch": "string",
+		    "name": "string",
+		    "state": "string",
+		    "cid_name": "string",
+		    "cid_num": "string",
+		    "ip_addr": "string",
+		    "dest": "string",
+		    "application": "string",
+		    "application_data": "string",
+		    "dialplan": "string",
+		    "context": "string",
+		    "read_codec": "string",
+		    "read_rate": "string",
+		    "read_bit_rate": "string",
+		    "write_codec": "string",
+		    "write_rate": "string",
+		    "write_bit_rate": "string",
+		    "secure": "string",
+		    "hostname": "string",
+		    "presence_id": "string",
+		    "accountcode": "string",
+		    "callstate": "string",
+		    "callee_name": "string",
+		    "callee_num": "string",
+		    "call_uuid": "string",
+		    "sent_callee_name": "string",
+		    "sent_callee_num": "string",
+		    "initial_cid_name": "string",
+		    "initial_cid_num": "string",
+		    "initial_ip_addr": "string",
+		    "initial_dest": "string",
+		    "initial_dialplan": "string",
+		    "initial_context": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "postgres",
+                "db_url": "{env:FREESWITCH_DB_URL}",
+                "table_name": "channels",
+                "domain": [["hostname", "=", "{exec:fs_cli -x 'switchname'}"]],
+                "identifier_columns": ["uuid", "hostname"],
+                "columns": {
+                    "uuid": "string",
+                    "direction": "string",
+		    "created": "string",
+		    "created_epoch": "int32",
+		    "name": "string",
+		    "state": "string",
+		    "cid_name": "string",
+		    "cid_num": "string",
+		    "ip_addr": "string",
+		    "dest": "string",
+		    "application": "string",
+		    "application_data": "string",
+		    "dialplan": "string",
+		    "context": "string",
+		    "read_codec": "string",
+		    "read_rate": "string",
+		    "read_bit_rate": "string",
+		    "write_codec": "string",
+		    "write_rate": "string",
+		    "write_bit_rate": "string",
+		    "secure": "string",
+		    "hostname": "string",
+		    "presence_id": "string",
+		    "accountcode": "string",
+		    "callstate": "string",
+		    "callee_name": "string",
+		    "callee_num": "string",
+		    "call_uuid": "string",
+		    "sent_callee_name": "string",
+		    "sent_callee_num": "string",
+		    "initial_cid_name": "string",
+		    "initial_cid_num": "string",
+		    "initial_ip_addr": "string",
+		    "initial_dest": "string",
+		    "initial_dialplan": "string",
+		    "initial_context": "string"
+                }
+            }
+        }
+    }
+}

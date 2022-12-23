@@ -1,0 +1,44 @@
+{
+    "tick": 1,
+    "draft": false,
+    "debug": true,
+    "env_from_aws_secretsmanager_id": "",
+    "sqlsync": {
+        "demo":  {
+            "active": true,
+            "source": {
+                "db_driver": "fsocket",
+                "db_url": "fsocket://user:cloudpbx@16.20.0.9:8021/",
+                "table_name": "calls",
+                "domain": [],
+                "identifier_columns": ["uuid"],
+                "columns": {
+                    "call_uuid": "string",
+                    "created": "string",
+                    "created_epoch": "int32",
+                    "uuid": "string",
+                    "b_uuid": "string",
+		    "direction": "string",
+                    "hostname": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "sqlite3",
+                "db_url": "sqlite3:///tmp/prueba-dest.sqlite",
+                "table_name": "channels",
+                "domain": [],
+                "identifier_columns": ["uuid"],
+                "mapping": {
+                    "call_uuid": "uuid",
+			"direction": "direction",
+			"hostname": "hostname"
+                },
+                "columns": {
+                    "uuid": "string",
+                    "direction": "string",
+                    "hostname": "string"
+                }
+            }
+        }
+    }
+}

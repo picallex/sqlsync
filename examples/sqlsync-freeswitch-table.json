@@ -1,0 +1,61 @@
+{
+    "tick": 1,
+    "draft": false,
+    "debug": false,
+    "env_from_aws_secretsmanager_id": "MYSECRETMANAGER",
+    "sqlsync": {
+        "members": {
+            "active": true,
+            "source": {
+                "db_driver": "postgres",
+                "db_url": "postgres://postgres:clave@localhost/freeswitch",
+                "table_name": "members",
+                "domain": [["instance_id", "=", "{exec:fs_cli -x 'eval $${hostname}'}"]],
+                "identifier_columns": ["instance_id", "uuid"],
+                "columns": {
+                    "queue": "string",
+                    "instance_id": "string",
+                    "uuid": "string",
+                    "session_uuid": "string",
+                    "cid_number": "string",
+                    "cid_name": "string",
+                    "system_epoch": "int32",
+                    "joined_epoch": "int32",
+                    "rejoined_epoch": "int32",
+                    "bridge_epoch": "int32",
+                    "abandoned_epoch": "int32",
+                    "base_score": "int32",
+                    "skill_score": "int32",
+                    "serving_agent": "string",
+                    "serving_system": "string",
+                    "state": "string"
+                }
+            },
+            "destination": {
+                "db_driver": "postgres",
+                "db_url": "{env:REMOTE_DB_URL}",
+                "table_name": "members",
+                "domain": [["instance_id", "=", "{exec:fs_cli -x 'eval $${hostname}'}"]],
+                "identifier_columns": ["instance_id", "uuid"],
+                "columns": {
+                    "queue": "string",
+                    "instance_id": "string",
+                    "uuid": "string",
+                    "session_uuid": "string",
+                    "cid_number": "string",
+                    "cid_name": "string",
+                    "system_epoch": "int32",
+                    "joined_epoch": "int32",
+                    "rejoined_epoch": "int32",
+                    "bridge_epoch": "int32",
+                    "abandoned_epoch": "int32",
+                    "base_score": "int32",
+                    "skill_score": "int32",
+                    "serving_agent": "string",
+                    "serving_system": "string",
+                    "state": "string"
+                }
+            }
+        }
+    }
+}
